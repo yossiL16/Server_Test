@@ -84,6 +84,6 @@ def decrypt(text:Fence):
     r += text.text[midel: ]
 
     l += r
-    return {{ "decrypted": l}}
+    return { "decrypted": l}
 
 
