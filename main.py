@@ -46,7 +46,7 @@ def Caesar_cipher(item:Caesar):
         for i, in texti:
             for j in latters:
                 if i == j:
-                    new_sentens.append(new_sentens[index(j) + item.offest])
+                    new_sentens.append(new_sentens[(index(j) + item.offest) % 26])
         return {"encrypted_text":str(new_sentens)}
 
     elif item.mood == "decrypt":
@@ -54,10 +54,36 @@ def Caesar_cipher(item:Caesar):
         for i, in texti:
             for j in latters:
                 if i == j:
-                    new_sentens.append(new_sentens[index(j) - item.offest])
+                    new_sentens.append(new_sentens[(index(j) - item.offest) % 26])
         return {"decrypted_text": str(new_sentens)}
     else:
         return "error"
 
+@app.get("/texts/{text}")
+def Encryption(text):
+    regular_text = text.replace(" ", "")
+    for i in range(regular_text):
+        l = ""
+        r = ""
+        if i % 2 == 0:
+            l += regular_text[i]
+        else:
+            r += regular_text[i]
+        l += r
+        return { "encrypted_text": l }
+
+
+class Fence(BaseModel):
+    text:str
+@app.post("/decrypt/")
+def decrypt(text:Fence):
+    l = ""
+    r = ""
+    midel= len(text.text) // 2
+    l += text.text[ : midel]
+    r += text.text[midel: ]
+
+    l += r
+    return {{ "decrypted": l}}
 
 
